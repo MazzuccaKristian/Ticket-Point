@@ -1,10 +1,11 @@
 #include "DB_Handler.h"
 
-// PLACEHOLDERS...
+// Credentials for DB.
+//TODO: possible encryption/hash
 std::string DB_HOST = "tcp://127.0.0.1:3306";
-std::string DB_USER = "ticketpointuser";
-std::string DB_PASSWORD = "TicketPoint";
-std::string DB_SCHEMA = "ticketpoint";
+std::string DB_USER = "ticketpoint_user";
+std::string DB_PASSWORD = "T!cketPo1ntPassword";
+std::string DB_SCHEMA = "TicketPoint_DB";
 //
 
 sql::Connection* DB_Setup(){
