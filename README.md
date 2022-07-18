@@ -7,5 +7,23 @@ Ticket Point is a trouble ticketing platform.
 The platform allows the user to report a problem in the form of a ticket.
 Technicians receive tickets and provide proper solutions.
 
+## Configuration
+1. Create schema:
+```sql
+    CREATE DATABASE IF NOT EXISTS TicketPoint_DB;
+``` 
+2. Create tables:
+```sql
+
+``` 
+3. Create user:
+```sql
+    CREATE USER 'ticketpoint_user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'T!cketPo1ntPassword';
+```
+4. Grant privileges:
+```sql
+
+``` 
+
 ## License
 GNU GPL 3.0
