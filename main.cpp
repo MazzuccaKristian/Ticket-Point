@@ -21,11 +21,20 @@ int GetLoginChoice(){
     return choice;
 }
 
+void CollectUserData(std::string *dataCollection){
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // flush std::cin (avoids garbage data)
+    std::cout << "Enter your username: ";
+    std::getline(std::cin, dataCollection[0]);
+    std::cout << "Enter your password: ";
+    std::getline(std::cin, dataCollection[1]);
+}
+
 int main(){
 
     sql::Connection* DB_connection = DB_Setup(); // Connect to DB
     
     bool isAppWorking{true};
+    std::string userData[2]{"",""};
 
     do{
         ShowLoginMenu(); // Show menu (login)
@@ -38,11 +47,15 @@ int main(){
                 break;
 
             case 1: // Login for 'user'
-                //TODO: Login for 'user'
+                CollectUserData(userData);
+                //TODO: try login with userData.
+                
                 break;
 
             case 2: // Login for 'technician'
-                //TODO: Login for 'technician'
+                //TODO: Login for 'technician'.
+                CollectUserData(userData);
+                //TODO: try login with userData.
                 break;
         }
     }while(isAppWorking);
