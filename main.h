@@ -8,6 +8,6 @@
 
 void ShowLoginMenu();
 int GetLoginChoice();
-void CollectUserData(std::string *dataCollection);
+std::string CollectUserData();
 
 #endif
