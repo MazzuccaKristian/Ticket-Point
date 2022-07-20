@@ -21,42 +21,53 @@ int GetLoginChoice(){
     return choice;
 }
 
-void CollectUserData(std::string *dataCollection){
+std::string CollectUserData(){
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // flush std::cin (avoids garbage data)
+    std::string userRecord{""};
+    std::string tempString{""};
     std::cout << "Enter your username: ";
-    std::getline(std::cin, dataCollection[0]);
+    std::getline(std::cin, tempString);
+    userRecord = userRecord + tempString + ",";
     std::cout << "Enter your password: ";
-    std::getline(std::cin, dataCollection[1]);
+    std::getline(std::cin, tempString);
+    userRecord = userRecord + tempString;
+    return userRecord;
 }
+
+
 
 int main(){
 
     sql::Connection* DB_connection = DB_Setup(); // Connect to DB
     
     bool isAppWorking{true};
-    std::string userData[2]{"",""};
+    std::string userDataRecord{""};
 
     do{
         ShowLoginMenu(); // Show menu (login)
         int loginChoice = GetLoginChoice(); // Retrieve user's choice (login)
         switch(loginChoice){
             case 0: // Exit
+            {
                 std::cout << "Program ended. Please, wait..." << std::endl;
                 isAppWorking = false;
                 delete DB_connection;
                 break;
-
+            }
             case 1: // Login for 'user'
-                CollectUserData(userData);
-                //TODO: try login with userData.
-                
+            {
+                userDataRecord = CollectUserData();
+                //TODO: try login with userDataRecord.
+                tryLogin_mockup(DB_connection, userDataRecord);
                 break;
-
+            }
             case 2: // Login for 'technician'
+            {
                 //TODO: Login for 'technician'.
-                CollectUserData(userData);
+                userDataRecord = CollectUserData();
                 //TODO: try login with userData.
                 break;
+            }
         }
     }while(isAppWorking);
 
