@@ -47,3 +47,6 @@ _deps
 # Build-related
 out/build
 [Bb][Uu][Ii][Ll][Dd]/
+
+# VS-Code configuration
+.vscode
