@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.16.3)
 
 project(TicketPoint)
 
-# add_subdirectory(${PROJECT_SOURCE_DIR}/Classes)
-# add_subdirectory(${PROJECT_SOURCE_DIR}/Database)
-# add_subdirectory(${PROJECT_SOURCE_DIR}/Utils)
-
-
 set(EXECUTABLES
     ${PROJECT_SOURCE_DIR}/Classes/Person.cpp
     ${PROJECT_SOURCE_DIR}/Classes/User.cpp
