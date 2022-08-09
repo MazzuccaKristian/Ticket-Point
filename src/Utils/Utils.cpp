@@ -24,12 +24,12 @@ int GetLoginChoice(){
 /**
  * @brief Collect username and password from user for login.
  * 
- * @return std::string, username:password format.
+ * @return std::string, mail:password format.
  */
 std::string CollectUserData(){
     std::string loginDataRecord {""};
     std::string loginDataRecord_temp{""};
-    std::cout << "Enter your username: ";
+    std::cout << "Enter your mail: ";
     std::getline(std::cin >> std::ws, loginDataRecord_temp);
     loginDataRecord = loginDataRecord + loginDataRecord_temp;
     loginDataRecord_temp = {""};
