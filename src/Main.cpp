@@ -29,13 +29,18 @@ int main(){
             }
             case 1: // Login for 'user'
             {
-                loginData = CollectUserData();
-                loggedUserData = TryLogin(connection, loginData); //ID:Name:password
-                //! Check for success
-                int id {std::stoi(loggedUserData.substr(0, loggedUserData.find_first_of(':')))};
-                std::string username {loggedUserData.substr(loggedUserData.find_first_of(':')+1, loggedUserData.find_last_of(':')-2)};
-                std::string password {loggedUserData.substr(loggedUserData.find_last_of(':')+1)};
-                User user (id, username, password);
+                bool isLoginValid {false};
+                do{
+                    loginData = CollectUserData();
+                    loggedUserData = TryLogin(connection, loginData);
+                    if(loggedUserData.compare("-1") != 0){
+                        isLoginValid = true;
+                    }else{
+                        // login failed.
+                        std::cout << "Login failed. Please, try again..." << std::endl;
+                    }
+                }while(!isLoginValid);
+                // HERE if login succedeed. Proceed and show user's menu.
                 break;
             }
             case 2: // Login for 'technician'
