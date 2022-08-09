@@ -12,27 +12,36 @@ sql::Connection *DatabaseSetup(){
         std::cout << "# ERR: SQLException in " << __FILE__ << std::endl;
         std::cout << "# ERR: " << e.what() << std::endl;
         std::cout << " (MySQL error code: " << e.getErrorCode() << ", SQLState: " << e.getSQLState() << " )" << std::endl;
-        exit(EXIT_FAILURE); //! FORCE EXIT
+        exit(EXIT_FAILURE); //! FORCED EXIT
     }
     return connection;
 }
 
+/**
+ * @brief Login phase: extract mail and password; setup params for LoginQuery; attempt login.
+ * 
+ * @param connection 
+ * @param loginRecord mail:password format.
+ * @return std::string - userId:mail:name:lastname:password:skillId:isTechnician
+ */
 std::string TryLogin(sql::Connection *connection, const std::string loginRecord){
     if(!connection -> isValid()){
         std::cout << "Connection lost..." << std::endl;
         exit(EXIT_FAILURE);
     }
-    const std::string username {loginRecord.substr(0, loginRecord.find_first_of(':'))};
+    const std::string mail {loginRecord.substr(0, loginRecord.find_first_of(':'))};
     const std::string password {loginRecord.substr(loginRecord.find_first_of(':') + 1, loginRecord.length())};
     sql::PreparedStatement *loginStatement;
     std::string result {""};
     try{
         loginStatement = connection -> prepareStatement(loginQuery);
-        loginStatement -> setString(1, username);
+        loginStatement -> setString(1, mail);
         loginStatement -> setString(2, password);
         sql::ResultSet *loginResult = loginStatement -> executeQuery();
         if(loginResult -> next()){
-            result = (std::to_string(loginResult -> getInt("Id"))) + ":" + (loginResult -> getString("Name")) + ":" + (loginResult -> getString("Password"));
+            result = BuildReturnString(loginResult);
+        }else{
+            result = "-1";
         }
         delete loginResult;
     }catch(sql::SQLException &e){
@@ -42,4 +51,28 @@ std::string TryLogin(sql::Connection *connection, const std::string loginRecord)
     }
     delete loginStatement;
     return result;
+}
+
+/**
+ * @brief Build a formatted string with user's data.
+ * 
+ * @param loginResult 
+ * @return std::string - userId:mail:name:lastname:password:skillId:isTechnician
+ */
+std::string BuildReturnString(sql::ResultSet *loginResult){
+    std::string userInfo {""};
+    userInfo.append(std::to_string(loginResult -> getInt("userId")));
+    userInfo.append(":");
+    userInfo.append(loginResult -> getString("mail"));
+    userInfo.append(":");
+    userInfo.append(loginResult -> getString("name"));
+    userInfo.append(":");
+    userInfo.append(loginResult -> getString("lastname"));
+    userInfo.append(":");
+    userInfo.append(loginResult -> getString("password"));
+    userInfo.append(":");
+    userInfo.append(std::to_string(loginResult -> getInt("skillId")));
+    userInfo.append(":");
+    userInfo.append(std::to_string(loginResult -> getInt("isTechnician")));
+    return userInfo;
 }
