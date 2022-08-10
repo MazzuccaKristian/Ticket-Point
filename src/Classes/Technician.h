@@ -3,9 +3,9 @@
 
 #include "Person.h"
 
-class Technician : private Person{
+class Technician : public Person{
     public:
-        Technician(int id, std::string username, std::string password);
+        Technician(int id, std::string mail, std::string name, std::string lastname, std::string password);
 };
 
 #endif
