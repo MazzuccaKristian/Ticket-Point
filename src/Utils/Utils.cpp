@@ -45,7 +45,7 @@ std::string CollectUserData(){
  * @param loginResultString 
  * @return std::tuple<int userId, std::string mail, std::string name, std::string lastname, std::string password> 
  */
-std::tuple<int, std::string, std::string, std::string, std::string> BuildLoginResultTuple(std::string loginResultString){
+std::tuple<int, std::string, std::string, std::string, std::string> BuildLoginResultTuple_User(std::string loginResultString){
     std::size_t startDelimiter {0};
     std::size_t endDelimiter {loginResultString.find_first_of(':')};
     int userId {std::stoi(loginResultString.substr(startDelimiter, endDelimiter - startDelimiter))};
@@ -64,13 +64,17 @@ std::tuple<int, std::string, std::string, std::string, std::string> BuildLoginRe
     return std::make_tuple(userId, mail, name, lastname, password);
 }
 
+std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> BuildLoginResultTuple_Technician(std::string loginResulString){
+    //TODO: create tuple builder. Check for isTechnician (DB)? 
+}
+
 /**
  * @brief Collect data and attemp login. Then, return a tuple with user's info.
  * 
  * @param connection 
  * @return std::tuple<int, std::string, std::string, std::string, std::string> 
  */
-std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase(sql::Connection *connection){
+std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase_User(sql::Connection *connection){
     std::string loginData {""};
     std::string loggedUserData {""};
     bool isLoginValid {false};
@@ -84,6 +88,32 @@ std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase(s
         }
     }while(!isLoginValid);
     std::tuple<int, std::string, std::string, std::string, std::string> loginResultTuple;
-    loginResultTuple = BuildLoginResultTuple(loggedUserData);
+    loginResultTuple = BuildLoginResultTuple_User(loggedUserData);
     return loginResultTuple;
+}
+
+std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> LoginPhase_Technician(sql::Connection *connection){
+    std::string loginData {""};
+    std::string loggedUserData {""};
+    bool isLoginValid {false};
+    do{
+        loginData = CollectUserData();
+        loggedUserData = TryLogin(connection, loginData);
+        if(loggedUserData.compare("-1") != 0){
+            isLoginValid = true;
+        }else{
+            std::cout << "Login failed. Please, try again..." << std::endl;
+        }
+    }while(!isLoginValid);
+    std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> loginResultTuple;
+    loginResultTuple = BuildLoginResultTuple_Technician(loggedUserData);
+}
+
+void ShowUserMenu(){
+    std::cout << "--- USER ---" << std::endl;
+    std::cout << "1. Show unresolved tickets;" << std::endl;
+    std::cout << "2. Create new ticket;" << std::endl;
+    std::cout << "3. Show archive;" << std::endl;
+    std::cout << "4. Logout;" << std::endl;
+    std::cout << "0. Exit." << std::endl;
 }
