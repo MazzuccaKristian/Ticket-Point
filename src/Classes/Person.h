@@ -6,10 +6,15 @@
 class Person{
     private:
         int person_id;
-        std::string person_username, person_password;
+        std::string person_mail, person_name, person_lastname, person_password;
 
     public:
-        Person(int id, std::string username, std::string password);
+        Person(int id, std::string mail, std::string name, std::string lastname, std::string password);
+        int getId();
+        std::string getMail();
+        std::string getName();
+        std::string getLastname();
+        std::string getPassword();
 };
 
 
