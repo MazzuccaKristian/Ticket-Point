@@ -43,7 +43,11 @@ CREATE TABLE IF NOT EXISTS Ticket (
   openingDate DATE NOT NULL,
   closingDate DATE,
   statusCode INT NOT NULL,
-  FOREIGN KEY (statusCode) REFERENCES Status(statusCode)
+  userId INT NOT NULL,
+  technicianID INT,
+  FOREIGN KEY (statusCode) REFERENCES Status(statusCode),
+  FOREIGN KEY (userId) REFERENCES User(userId),
+  FOREIGN KEY (technicianId) REFERENCES User(userId)
 );
 ``` 
 3. Create user:
