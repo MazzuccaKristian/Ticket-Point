@@ -15,9 +15,11 @@ const std::string DB_PASSWORD {"T!cketPointP4ssword"};
 const std::string DB_SCHEMA {"TicketPoint_DB"};
 
 const std::string loginQuery {"SELECT * FROM User WHERE mail = ? AND password = ? and isTechnician = ?"};
+const std::string ticketSelectionQuery {"SELECT ticketId, problemText, openingDate, statusCode FROM Ticket WHERE userId = ?"};
 
 sql::Connection *DatabaseSetup();
 std::string TryLogin(sql::Connection *connection, const std::string loginRecord, bool isTechnician = false);
 std::string BuildReturnString(sql::ResultSet *loginResult);
+sql::ResultSet *RetrieveOpenTickets(sql::Connection *connection, int userId);
 
 #endif

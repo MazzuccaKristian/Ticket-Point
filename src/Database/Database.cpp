@@ -81,3 +81,23 @@ std::string BuildReturnString(sql::ResultSet *loginResult){
     userInfo.append(std::to_string(loginResult -> getInt("isTechnician")));
     return userInfo;
 }
+
+sql::ResultSet *RetrieveOpenTickets(sql::Connection *connection, int userId){
+    if(!connection -> isValid()){
+        std::cout << "Connection lost..." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    sql::ResultSet *ticketsSelectionResult;
+    sql::PreparedStatement *ticketsSelectionStatement;
+    try{
+        ticketsSelectionStatement = connection -> prepareStatement(ticketSelectionQuery);
+        ticketsSelectionStatement -> setInt(1, userId);
+        ticketsSelectionResult = ticketsSelectionStatement -> executeQuery();
+    }catch(sql::SQLException &e){
+        std::cout << "# ERR: SQLException in " << __FILE__ << std::endl;
+        std::cout << "# ERR: " << e.what() << std::endl;
+        std::cout << " (MySQL error code: " << e.getErrorCode() << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
+    delete ticketsSelectionStatement;
+    return ticketsSelectionResult;
+}
