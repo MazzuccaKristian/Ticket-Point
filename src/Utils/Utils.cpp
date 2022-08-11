@@ -64,8 +64,26 @@ std::tuple<int, std::string, std::string, std::string, std::string> BuildLoginRe
     return std::make_tuple(userId, mail, name, lastname, password);
 }
 
-std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> BuildLoginResultTuple_Technician(std::string loginResulString){
-    //TODO: create tuple builder. Check for isTechnician (DB)? 
+std::tuple<int, std::string, std::string, std::string, std::string, int> BuildLoginResultTuple_Technician(std::string loginResultString){
+    std::size_t startDelimiter {0};
+    std::size_t endDelimiter {loginResultString.find_first_of(':')};
+    int technicianId {std::stoi(loginResultString.substr(startDelimiter, endDelimiter - startDelimiter))};
+    startDelimiter = endDelimiter + 1;
+    endDelimiter = loginResultString.find_first_of(':', startDelimiter);
+    std::string mail {loginResultString.substr(startDelimiter, endDelimiter - startDelimiter)};
+    startDelimiter = endDelimiter + 1;
+    endDelimiter = loginResultString.find_first_of(':', startDelimiter);
+    std::string name {loginResultString.substr(startDelimiter, endDelimiter - startDelimiter)};
+    startDelimiter = endDelimiter + 1;
+    endDelimiter = loginResultString.find_first_of(':', startDelimiter);
+    std::string lastname {loginResultString.substr(startDelimiter, endDelimiter - startDelimiter)};
+    startDelimiter = endDelimiter + 1;
+    endDelimiter = loginResultString.find_first_of(':', startDelimiter);
+    std::string password {loginResultString.substr(startDelimiter, endDelimiter - startDelimiter)};
+    startDelimiter = endDelimiter + 1;
+    endDelimiter = loginResultString.find_first_of(':', startDelimiter);
+    int skillId {std::stoi(loginResultString.substr(startDelimiter, endDelimiter - startDelimiter))};
+    return std::make_tuple(technicianId, mail, name, lastname, password, skillId);
 }
 
 /**
@@ -80,7 +98,7 @@ std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase_U
     bool isLoginValid {false};
     do{
         loginData = CollectUserData();
-        loggedUserData = TryLogin(connection, loginData);
+        loggedUserData = TryLogin(connection, loginData, false);
         if(loggedUserData.compare("-1") != 0){
             isLoginValid = true;
         }else{
@@ -92,21 +110,22 @@ std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase_U
     return loginResultTuple;
 }
 
-std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> LoginPhase_Technician(sql::Connection *connection){
+std::tuple<int, std::string, std::string, std::string, std::string, int> LoginPhase_Technician(sql::Connection *connection){
     std::string loginData {""};
     std::string loggedUserData {""};
     bool isLoginValid {false};
     do{
         loginData = CollectUserData();
-        loggedUserData = TryLogin(connection, loginData);
+        loggedUserData = TryLogin(connection, loginData, true);
         if(loggedUserData.compare("-1") != 0){
             isLoginValid = true;
         }else{
             std::cout << "Login failed. Please, try again..." << std::endl;
         }
     }while(!isLoginValid);
-    std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> loginResultTuple;
+    std::tuple<int, std::string, std::string, std::string, std::string, int> loginResultTuple;
     loginResultTuple = BuildLoginResultTuple_Technician(loggedUserData);
+    return loginResultTuple;
 }
 
 void ShowUserMenu(){
