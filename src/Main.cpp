@@ -39,6 +39,20 @@ int main(){
                                 std::get<4>(loggedUserTuple));
                 std::cout << "Welcome back, " << loggedUser.getName() << std::endl;
                 ShowUserMenu();
+                int userChoice {getUserChoice()};
+                switch(userChoice){
+                    case 0:
+                    {
+                        std::cout << "Program ended. Please, wait..." << std::endl;
+                        isAppWorking = false;
+                        delete connection;
+                        break;
+                    }
+                    case 1:
+                    {
+                        ShowUnresolvedTickets(connection, loggedUser.getId());
+                    }
+                }
                 break;
             }
             case 2: // Login for 'technician'
