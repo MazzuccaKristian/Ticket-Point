@@ -24,19 +24,24 @@ sql::Connection *DatabaseSetup(){
  * @param loginRecord mail:password format.
  * @return std::string - userId:mail:name:lastname:password:skillId:isTechnician
  */
-std::string TryLogin(sql::Connection *connection, const std::string loginRecord){
+std::string TryLogin(sql::Connection *connection, const std::string loginRecord, bool isTechnician){
     if(!connection -> isValid()){
         std::cout << "Connection lost..." << std::endl;
         exit(EXIT_FAILURE);
     }
     const std::string mail {loginRecord.substr(0, loginRecord.find_first_of(':'))};
     const std::string password {loginRecord.substr(loginRecord.find_first_of(':') + 1, loginRecord.length())};
+    int technicianFlag {0};
+    if(isTechnician){
+        technicianFlag = 1;
+    }
     sql::PreparedStatement *loginStatement;
     std::string result {""};
     try{
         loginStatement = connection -> prepareStatement(loginQuery);
         loginStatement -> setString(1, mail);
         loginStatement -> setString(2, password);
+        loginStatement -> setInt(3, technicianFlag);
         sql::ResultSet *loginResult = loginStatement -> executeQuery();
         if(loginResult -> next()){
             result = BuildReturnString(loginResult);
