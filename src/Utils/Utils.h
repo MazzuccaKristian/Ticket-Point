@@ -13,5 +13,7 @@ std::tuple<int, std::string, std::string, std::string, std::string, int> LoginPh
 std::tuple<int, std::string, std::string, std::string, std::string> BuildLoginResultTuple_User(std::string loginResultString);
 std::tuple<int, std::string, std::string, std::string, std::string, int> BuildLoginResultTuple_Technician(std::string loginResultString);
 void ShowUserMenu();
+int getUserChoice();
+void ShowUnresolvedTickets(sql::Connection *connection, int userId);
 
 #endif

@@ -90,7 +90,7 @@ std::tuple<int, std::string, std::string, std::string, std::string, int> BuildLo
  * @brief Collect data and attemp login. Then, return a tuple with user's info.
  * 
  * @param connection 
- * @return std::tuple<int, std::string, std::string, std::string, std::string> 
+ * @return std::tuple<int userId, std::string mail, std::string name, std::string lastname, std::string password> 
  */
 std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase_User(sql::Connection *connection){
     std::string loginData {""};
@@ -110,6 +110,12 @@ std::tuple<int, std::string, std::string, std::string, std::string> LoginPhase_U
     return loginResultTuple;
 }
 
+/**
+ * @brief Collect data and attemp login. Then, return a tuple with user's info.
+ * 
+ * @param connection 
+ * @return std::tuple<int technicianId, std::string mail, std::string name, std::string lastname, std::string password, int skillId> 
+ */
 std::tuple<int, std::string, std::string, std::string, std::string, int> LoginPhase_Technician(sql::Connection *connection){
     std::string loginData {""};
     std::string loggedUserData {""};
@@ -135,4 +141,22 @@ void ShowUserMenu(){
     std::cout << "3. Show archive;" << std::endl;
     std::cout << "4. Logout;" << std::endl;
     std::cout << "0. Exit." << std::endl;
+}
+
+int getUserChoice(){
+    int choice {0};
+    bool isChoiceValid {false};
+    do{
+        std::cout << "Enter your option: ";
+        std::cin >> choice;
+        if(choice < 0 || choice > 4){
+            std::cout << "Option not allowed. Please, try again..." << std::endl;
+            isChoiceValid = false;
+        }
+    }while(!isChoiceValid);
+    return choice;
+}
+
+void ShowUnresolvedTickets(int userId, sql::Connection *connection){
+    sql::ResultSet *ticketSelectionResult {RetrieveOpenTickets(connection, userId)};
 }
