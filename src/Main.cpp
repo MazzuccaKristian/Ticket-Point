@@ -16,7 +16,7 @@ int main(){
     std::string loginData{""};
     std::string loggedUserData{""}; //TODO: unnecessary (still here for prototype of login for Technician)
     std::tuple<int, std::string, std::string, std::string, std::string> loggedUserTuple;
-    std::tuple<int, std::string, std::string, std::string, std::string, std::string, std::string> loggedTechnicianTuple;
+    std::tuple<int, std::string, std::string, std::string, std::string, int> loggedTechnicianTuple;
 
     do{
         ShowMainMenu();
@@ -44,14 +44,13 @@ int main(){
             case 2: // Login for 'technician'
             {
                 loggedTechnicianTuple = LoginPhase_Technician(connection);
-
-                loginData = CollectUserData();
-                loggedUserData = TryLogin(connection, loginData); //ID:Name:password
-                //! Check for success
-                int id {std::stoi(loggedUserData.substr(0, loggedUserData.find_first_of(':')))};
-                std::string username {loggedUserData.substr(loggedUserData.find_first_of(':')+1, loggedUserData.find_last_of(':')-2)};
-                std::string password {loggedUserData.substr(loggedUserData.find_last_of(':')+1)};
-                // Technician technician(id, username, password);
+                Technician loggedTechnician(std::get<0>(loggedTechnicianTuple),
+                                            std::get<1>(loggedTechnicianTuple),
+                                            std::get<2>(loggedTechnicianTuple),
+                                            std::get<3>(loggedTechnicianTuple),
+                                            std::get<4>(loggedTechnicianTuple),
+                                            std::get<5>(loggedTechnicianTuple));
+                std::cout << "Welcome back, " << loggedTechnician.getName() << std::endl;
                 break;
             }
         }
