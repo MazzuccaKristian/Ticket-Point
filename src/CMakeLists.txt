@@ -13,3 +13,19 @@ set(EXECUTABLES
 add_executable(${PROJECT_NAME} ${EXECUTABLES})
 
 target_link_libraries(${PROJECT_NAME} mysqlcppconn)
+
+# TESTING executables
+add_executable(connection ${PROJECT_SOURCE_DIR}/Test/Connection.cpp ${PROJECT_SOURCE_DIR}/Database/Database.cpp)
+target_link_libraries(connection mysqlcppconn)
+add_executable(retrieveTickets ${PROJECT_SOURCE_DIR}/Test/RetrieveTickets.cpp ${PROJECT_SOURCE_DIR}/Database/Database.cpp)
+target_link_libraries(retrieveTickets mysqlcppconn)
+###
+
+enable_testing()
+
+# UNIT TESTS
+add_test(NAME connection COMMAND $<TARGET_FILE:connection>)
+set_property(TEST connection PROPERTY WILL_FAIL false)
+add_test(NAME retrieveTickets COMMAND $<TARGET_FILE:retrieveTickets>)
+set_property(TEST retrieveTickets PROPERTY WILL_FAIL false)
+#
