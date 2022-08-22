@@ -145,7 +145,7 @@ void ShowUserMenu(){
 
 int getUserChoice(){
     int choice {0};
-    bool isChoiceValid {false};
+    bool isChoiceValid {true};
     do{
         std::cout << "Enter your option: ";
         std::cin >> choice;
@@ -157,6 +157,12 @@ int getUserChoice(){
     return choice;
 }
 
-void ShowUnresolvedTickets(int userId, sql::Connection *connection){
+void ShowUnresolvedTickets(sql::Connection *connection, int userId){
     sql::ResultSet *ticketSelectionResult {RetrieveOpenTickets(connection, userId)};
+    while(ticketSelectionResult -> next()){
+        //TODO: format and show tickets;
+        std::cout << "Ticket #" << ticketSelectionResult -> getInt("TicketId") << ": " 
+        << ticketSelectionResult -> getString("ProblemText") << "." << std::endl;
+        std::cout << "Date: " << ticketSelectionResult -> getString("OpeningDate") << "." << std::endl << std::endl;
+    }
 }
