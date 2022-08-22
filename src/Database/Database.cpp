@@ -82,6 +82,13 @@ std::string BuildReturnString(sql::ResultSet *loginResult){
     return userInfo;
 }
 
+/**
+ * @brief Select logged user's tickets.
+ * 
+ * @param connection 
+ * @param userId 
+ * @return sql::ResultSet* - ResultSet's "Raw format"
+ */
 sql::ResultSet *RetrieveOpenTickets(sql::Connection *connection, int userId){
     if(!connection -> isValid()){
         std::cout << "Connection lost..." << std::endl;
