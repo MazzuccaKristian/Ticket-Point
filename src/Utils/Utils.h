@@ -15,5 +15,6 @@ std::tuple<int, std::string, std::string, std::string, std::string, int> BuildLo
 void ShowUserMenu();
 int getUserChoice();
 void ShowUnresolvedTickets(sql::Connection *connection, int userId);
+void OpenNewTicket(sql::Connection *connection, int userId);
 
 #endif

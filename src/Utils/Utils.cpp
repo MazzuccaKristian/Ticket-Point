@@ -166,3 +166,15 @@ void ShowUnresolvedTickets(sql::Connection *connection, int userId){
         std::cout << "Date: " << ticketSelectionResult -> getString("OpeningDate") << "." << std::endl << std::endl;
     }
 }
+
+void OpenNewTicket(sql::Connection *connection, int userId){
+    std::string ticketText {""};
+    std::cout << "Enter your ploblem: ";
+    std::getline(std::cin >> std::ws, ticketText);
+    std::tuple<int, std::string> ticketInfo = std::make_tuple(userId, ticketText);
+    if(CreateNewTicket(connection, ticketInfo)){
+        std::cout << "Ticket created!" << std::endl;
+    }else{
+        std::cout << "Operation aborted..." << std::endl;
+    }
+}
