@@ -108,3 +108,27 @@ sql::ResultSet *RetrieveOpenTickets(sql::Connection *connection, int userId){
     delete ticketsSelectionStatement;
     return ticketsSelectionResult;
 }
+
+bool CreateNewTicket(sql::Connection *connection, std::tuple<int, std::string> ticket){
+    if(!connection -> isValid()){
+        std::cout << "Connection lost..." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    sql::PreparedStatement *ticketCreationStatement;
+    bool querySuccess {false};
+    try{
+        ticketCreationStatement = connection -> prepareStatement(ticketCreationQuery);
+        ticketCreationStatement -> setString(1, std::get<1>(ticket));
+        ticketCreationStatement -> setInt(2, 0);
+        ticketCreationStatement -> setInt(3, std::get<0>(ticket));
+        if(!ticketCreationStatement -> execute()){
+            querySuccess = true;
+        }
+    }catch(sql::SQLException &e){
+        std::cout << "# ERR: SQLException in " << __FILE__ << std::endl;
+        std::cout << "# ERR: " << e.what() << std::endl;
+        std::cout << " (MySQL error code: " << e.getErrorCode() << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
+    delete ticketCreationStatement;
+    return querySuccess;
+}
