@@ -51,6 +51,11 @@ int main(){
                     case 1:
                     {
                         ShowUnresolvedTickets(connection, loggedUser.getId());
+                        break;
+                    }
+                    case 2:
+                    {
+                        OpenNewTicket(connection, loggedUser.getId());
                     }
                 }
                 break;
