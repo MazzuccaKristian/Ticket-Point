@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS User (
 );
 
 CREATE TABLE IF NOT EXISTS Ticket (
-  ticketId INT PRIMARY KEY,
+  ticketId INT PRIMARY KEY AUTO_INCREMENT,
   problemText VARCHAR(100) NOT NULL,
   openingDate DATE NOT NULL,
   closingDate DATE,
