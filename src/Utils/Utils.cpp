@@ -160,9 +160,8 @@ int getUserChoice(){
 void ShowUnresolvedTickets(sql::Connection *connection, int userId){
     sql::ResultSet *ticketSelectionResult {RetrieveOpenTickets(connection, userId)};
     while(ticketSelectionResult -> next()){
-        //TODO: format and show tickets;
         std::cout << "Ticket #" << ticketSelectionResult -> getInt("TicketId") << ": " 
-        << ticketSelectionResult -> getString("ProblemText") << "." << std::endl;
+        << ticketSelectionResult -> getString("ProblemText") << std::endl;
         std::cout << "Date: " << ticketSelectionResult -> getString("OpeningDate") << "." << std::endl << std::endl;
     }
 }
@@ -176,5 +175,15 @@ void OpenNewTicket(sql::Connection *connection, int userId){
         std::cout << "Ticket created!" << std::endl;
     }else{
         std::cout << "Operation aborted..." << std::endl;
+    }
+}
+
+void ShowArchive(sql::Connection *connection, int userId){
+    sql::ResultSet *archiveSelectionResult {RetrieveArchive(connection, userId)};
+    while(archiveSelectionResult -> next()){
+        std::cout << "Ticket #" << archiveSelectionResult -> getInt("TicketId") << ": " 
+        << archiveSelectionResult -> getString("ProblemText") << std::endl;
+        std::cout << "Opening date: " << archiveSelectionResult -> getString("OpeningDate") 
+        << ", closing date: " << archiveSelectionResult -> getString("ClosingDate") << "." << std::endl << std::endl;
     }
 }
