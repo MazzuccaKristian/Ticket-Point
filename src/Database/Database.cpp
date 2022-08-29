@@ -109,6 +109,14 @@ sql::ResultSet *RetrieveOpenTickets(sql::Connection *connection, int userId){
     return ticketsSelectionResult;
 }
 
+/**
+ * @brief Create new ticket.
+ * 
+ * @param connection 
+ * @param ticket std::tuple<int userId, std::string ticketText>
+ * @return true when ticket has been created.
+ * @return false when creation operation fails.
+ */
 bool CreateNewTicket(sql::Connection *connection, std::tuple<int, std::string> ticket){
     if(!connection -> isValid()){
         std::cout << "Connection lost..." << std::endl;
@@ -131,4 +139,31 @@ bool CreateNewTicket(sql::Connection *connection, std::tuple<int, std::string> t
     }
     delete ticketCreationStatement;
     return querySuccess;
+}
+
+/**
+ * @brief Get "closed" tickets for specified user.
+ * 
+ * @param connection 
+ * @param userId 
+ * @return sql::ResultSet* - Set of "closed" tickets (raw)
+ */
+sql::ResultSet *RetrieveArchive(sql::Connection *connection, int userId){
+    if(!connection -> isValid()){
+        std::cout << "Connection lost..." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    sql::ResultSet *archiveResult;
+    sql::PreparedStatement *archiveSelectionStatement;
+    try{
+        archiveSelectionStatement = connection -> prepareStatement(archiveSelectionQuery);
+        archiveSelectionStatement -> setInt(1, userId);
+        archiveResult = archiveSelectionStatement -> executeQuery();
+    }catch(sql::SQLException &e){
+        std::cout << "# ERR: SQLException in " << __FILE__ << std::endl;
+        std::cout << "# ERR: " << e.what() << std::endl;
+        std::cout << " (MySQL error code: " << e.getErrorCode() << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
+    delete archiveSelectionStatement;
+    return archiveResult;
 }
