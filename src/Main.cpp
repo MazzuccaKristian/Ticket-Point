@@ -56,6 +56,12 @@ int main(){
                     case 2:
                     {
                         OpenNewTicket(connection, loggedUser.getId());
+                        break;
+                    }
+                    case 3:
+                    {
+                        ShowArchive(connection, loggedUser.getId());
+                        break;
                     }
                 }
                 break;
