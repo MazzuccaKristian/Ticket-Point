@@ -14,7 +14,6 @@ int main(){
     bool isAppWorking {true};
     std::string userDataRecord {""};
     std::string loginData{""};
-    std::string loggedUserData{""}; //TODO: unnecessary (still here for prototype of login for Technician)
     std::tuple<int, std::string, std::string, std::string, std::string> loggedUserTuple;
     std::tuple<int, std::string, std::string, std::string, std::string, int> loggedTechnicianTuple;
 
@@ -31,6 +30,7 @@ int main(){
             }
             case 1: // Login for 'user'
             {
+                bool isUserLogged {false};
                 loggedUserTuple = LoginPhase_User(connection);
                 User loggedUser (std::get<0>(loggedUserTuple),
                                 std::get<1>(loggedUserTuple),
@@ -38,30 +38,41 @@ int main(){
                                 std::get<3>(loggedUserTuple),
                                 std::get<4>(loggedUserTuple));
                 std::cout << "Welcome back, " << loggedUser.getName() << std::endl;
-                ShowUserMenu();
-                int userChoice {getUserChoice()};
-                switch(userChoice){
-                    case 0:
-                    {
-                        std::cout << "Program ended. Please, wait..." << std::endl;
-                        isAppWorking = false;
-                        delete connection;
-                        break;
-                    }
-                    case 1:
-                    {
-                        ShowUnresolvedTickets(connection, loggedUser.getId());
-                        break;
-                    }
-                    case 2:
-                    {
-                        OpenNewTicket(connection, loggedUser.getId());
-                        break;
-                    }
-                    case 3:
-                    {
-                        ShowArchive(connection, loggedUser.getId());
-                        break;
+                if(&loggedUser != nullptr){ // check existence of User object.
+                    isUserLogged = true; 
+                }
+                while(isUserLogged){
+                    ShowUserMenu();
+                    int userChoice {getUserChoice()};
+                    switch(userChoice){
+                        case 0:
+                        {
+                            std::cout << "Program ended. Please, wait..." << std::endl;
+                            isAppWorking = false;
+                            delete connection;
+                            exit(EXIT_SUCCESS);
+                        }
+                        case 1:
+                        {
+                            ShowUnresolvedTickets(connection, loggedUser.getId());
+                            break;
+                        }
+                        case 2:
+                        {
+                            OpenNewTicket(connection, loggedUser.getId());
+                            break;
+                        }
+                        case 3:
+                        {
+                            ShowArchive(connection, loggedUser.getId());
+                            break;
+                        }
+                        case 4:
+                        {
+                            std::cout << "Logout..." << std::endl;
+                            loggedUser.~User();
+                            isUserLogged = false;
+                        }
                     }
                 }
                 break;
