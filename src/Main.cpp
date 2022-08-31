@@ -79,6 +79,7 @@ int main(){
             }
             case 2: // Login for 'technician'
             {
+                bool isTechnicianLogged {false};
                 loggedTechnicianTuple = LoginPhase_Technician(connection);
                 Technician loggedTechnician(std::get<0>(loggedTechnicianTuple),
                                             std::get<1>(loggedTechnicianTuple),
@@ -86,7 +87,23 @@ int main(){
                                             std::get<3>(loggedTechnicianTuple),
                                             std::get<4>(loggedTechnicianTuple),
                                             std::get<5>(loggedTechnicianTuple));
+                if(&loggedTechnician != nullptr){
+                    isTechnicianLogged = true;
+                }
                 std::cout << "Welcome back, " << loggedTechnician.getName() << std::endl;
+                while(isTechnicianLogged){
+                    ShowTechnicianMenu();
+                    int technicianChoice {getUserChoice()};
+                    switch(technicianChoice){
+                        case 0:
+                        {
+                            std::cout << "Program ended. Please, wait..." << std::endl;
+                            isAppWorking = false;
+                            delete connection;
+                            exit(EXIT_SUCCESS);
+                        }
+                    }
+                }
                 break;
             }
         }
