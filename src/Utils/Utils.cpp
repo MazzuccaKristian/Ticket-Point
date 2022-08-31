@@ -143,6 +143,15 @@ void ShowUserMenu(){
     std::cout << "0. Exit." << std::endl;
 }
 
+void ShowTechnicianMenu(){
+    std::cout << "--- Technician ---" << std::endl;
+    std::cout << "1. Show assigned tickets;" << std::endl;
+    std::cout << "2. Show tickets' pool;" << std::endl;
+    std::cout << "3. Take over a ticket;" << std::endl;
+    std::cout << "4. Close ticket;" << std::endl;
+    std::cout << "0. Exit." << std::endl;
+}
+
 int getUserChoice(){
     int choice {0};
     bool isChoiceValid {true};
