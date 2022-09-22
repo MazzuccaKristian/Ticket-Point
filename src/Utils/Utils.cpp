@@ -196,3 +196,11 @@ void ShowArchive(sql::Connection *connection, int userId){
         << ", closing date: " << archiveSelectionResult -> getString("ClosingDate") << "." << std::endl << std::endl;
     }
 }
+
+void ShowFormattedPool(sql::ResultSet *rawPool){
+    while(rawPool -> next()){
+        std::cout << "Ticket #" << rawPool -> getInt("TicketId") << "("
+        << rawPool -> getString("OpeningDate") << "):" << rawPool -> getString("ProblemText")
+        << std::endl;
+    }
+}

@@ -18,5 +18,6 @@ int getUserChoice();
 void ShowUnresolvedTickets(sql::Connection *connection, int userId);
 void OpenNewTicket(sql::Connection *connection, int userId);
 void ShowArchive(sql::Connection *connection, int userId);
+void ShowFormattedPool(sql::ResultSet *rawPool);
 
 #endif
