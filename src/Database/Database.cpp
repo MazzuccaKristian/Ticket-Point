@@ -167,3 +167,22 @@ sql::ResultSet *RetrieveArchive(sql::Connection *connection, int userId){
     delete archiveSelectionStatement;
     return archiveResult;
 }
+
+sql::ResultSet *ShowPool(sql::Connection *connection, int userId){
+    if(!connection -> isValid()){
+        std::cout << "Connection lost..." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    sql::ResultSet *pool;
+    sql::PreparedStatement *poolSelectionStatement;
+    try{
+        poolSelectionStatement = connection -> prepareStatement(poolSelectionQuery);
+        pool = poolSelectionStatement -> executeQuery();
+    }catch(sql::SQLException &e){
+        std::cout << "# ERR: SQLException in " << __FILE__ << std::endl;
+        std::cout << "# ERR: " << e.what() << std::endl;
+        std::cout << " (MySQL error code: " << e.getErrorCode() << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
+    delete poolSelectionStatement;
+    return pool;
+}
