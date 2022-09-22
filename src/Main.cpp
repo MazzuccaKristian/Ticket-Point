@@ -102,6 +102,11 @@ int main(){
                             delete connection;
                             exit(EXIT_SUCCESS);
                         }
+                        case 2:
+                        {
+                            sql::ResultSet *pool = ShowPool(connection, loggedTechnician.getId());
+                            ShowFormattedPool(pool);
+                        }
                     }
                 }
                 break;
